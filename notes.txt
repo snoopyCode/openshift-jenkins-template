@@ -1,2 +1,4 @@
 https://github.com/jenkinsci/docker
 https://github.com/openshift/origin/tree/master/examples/jenkins
+https://github.com/glenjamin/jenkins-groovy-examples/blob/master/README.md
+https://wiki.jenkins.io/display/JENKINS/Add+a+Maven+Installation,+Tool+Installation,+Modify+System+Config

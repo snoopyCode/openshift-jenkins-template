@@ -7,17 +7,17 @@
     <server>
       <id>nexus</id>
       <username>deployment</username>
-      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+      <password>TODO_ADD_DEPLOYMENT_PASSWORD</password>
     </server>
     <server>
       <id>nexus-snapshots</id>
       <username>deployment</username>
-      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+      <password>TODO_ADD_DEPLOYMENT_PASSWORD</password>
     </server>
     <server>
       <id>nexus-releases</id>
       <username>deployment</username>
-      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+      <password>TODO_ADD_DEPLOYMENT_PASSWORD</password>
     </server>
   </servers>
 
@@ -25,7 +25,7 @@
       <mirror>
          <id>nexus</id>
          <name>OpenShift Nexus</name>
-         <url>http://nexus-${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+         <url>http://nexus-pps-ea.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
          <mirrorOf>*</mirrorOf>
       </mirror>
   </mirrors>
@@ -40,15 +40,14 @@
         <repository>
             <id>central</id>
             <name>Nexus</name>
-            <url>http://nexus-${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+            <url>http://nexus-pps-ea.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
         </repository>
       </repositories>
-
       <pluginRepositories>
         <pluginRepository>
             <id>central</id>
             <name>Nexus</name>
-            <url>http://nexus-p${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+            <url>http://nexus-ppps-ea.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
         </pluginRepository>
       </pluginRepositories>
     </profile>
