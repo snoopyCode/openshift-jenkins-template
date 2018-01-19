@@ -1,0 +1,3 @@
+email=npm@deployment.com
+registry=http://nexus-${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/repositories/npm_releases/
+_auth=${NEXUS_NPM_REPO_TOKEN}

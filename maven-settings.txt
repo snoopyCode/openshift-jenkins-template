@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <id>nexus</id>
+      <username>deployment</username>
+      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+    </server>
+    <server>
+      <id>nexus-snapshots</id>
+      <username>deployment</username>
+      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+    </server>
+    <server>
+      <id>nexus-releases</id>
+      <username>deployment</username>
+      <password>${NEXUS_MAVEN_DEPLOYMENT_PASSWORD}</password>
+    </server>
+  </servers>
+
+  <mirrors>
+      <mirror>
+         <id>nexus</id>
+         <name>OpenShift Nexus</name>
+         <url>http://nexus-${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+         <mirrorOf>*</mirrorOf>
+      </mirror>
+  </mirrors>
+
+  <profiles>
+    <profile>
+        <id>default</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+      <repositories>
+        <repository>
+            <id>central</id>
+            <name>Nexus</name>
+            <url>http://nexus-${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+        </repository>
+      </repositories>
+
+      <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Nexus</name>
+            <url>http://nexus-p${PROJECT_NAME}.mp-dev-cnap.bmwgroup.net/nexus/content/groups/public/</url>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+</settings>

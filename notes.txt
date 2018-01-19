@@ -1,0 +1,2 @@
+https://github.com/jenkinsci/docker
+https://github.com/openshift/origin/tree/master/examples/jenkins
