@@ -34,7 +34,6 @@ apache-httpcomponents-client-4-api: 4.5.3-2.0
 jsch: 0.1.54.1
 maven-plugin: 3.0
 structs: 1.10
-workflow-step-api: 2.14
 credentials-binding: 1.13
 workflow-api: 2.23.1
 workflow-cps: 2.41
