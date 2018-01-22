@@ -14,15 +14,16 @@ import org.jenkinsci.plugins.plaincredentials.impl.*
 domain = Domain.global()
 store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
+//TODO should be set by-default using the openshift jenkins image
 // "pps-ea-ppsea-ssh" for OpenShift integration
-store.addCredentials(domain, new BasicSSHUserPrivateKey(
-        CredentialsScope.GLOBAL,
-        "pps-ea-ppsea-ssh",
-        "default",
-        new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource("TODO_ADD_PRIVATE_KEY"),
-        "",
-        "pps-ea-ppsea-ssh")
-)
+//store.addCredentials(domain, new BasicSSHUserPrivateKey(
+//        CredentialsScope.GLOBAL,
+//        "pps-ea-ppsea-ssh",
+//        "default",
+//        new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource("TODO_ADD_PRIVATE_KEY"),
+//        "",
+//        "pps-ea-ppsea-ssh")
+//)
 
 // "http-proxy" for npm builds
 store.addCredentials(domain, new StringCredentialsImpl(
