@@ -22,7 +22,6 @@ workflow-aggregator: 2.5
 workflow-basic-steps: 2.6
 scm-api: 2.2.5
 workflow-durable-task-step: 2.16
-workflow-remote-loader: 1.4
 script-security: 1.35
 workflow-support: 2.14
 junit: 1.23
