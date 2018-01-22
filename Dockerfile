@@ -1,5 +1,5 @@
 # Source: https://github.com/openshift/jenkins/blob/master/2/Dockerfile.rhel7
-FROM openshift/jenkins-2-rhel7
+FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 # Setup environment variables
 ENV OPENSHIFT_JENKINS_JVM_ARCH i386
