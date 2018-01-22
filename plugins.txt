@@ -18,7 +18,6 @@ pipeline-stage-step: 2.3
 pipeline-utility-steps: 1.5.1
 plain-credentials: 1.4
 ssh-credentials: 1.13
-subversion: 2.9
 workflow-aggregator: 2.5
 workflow-basic-steps: 2.6
 workflow-cps-global-lib: 2.9
