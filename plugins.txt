@@ -9,7 +9,6 @@ jquery-detached: 1.2.1
 mailer: 1.20
 mapdb-api: 1.0.9.0
 matrix-project: 1.12
-momentjs: 1.1.1
 multiple-scms: 0.6
 openshift-login: 1.0.0
 openshift-sync: 0.1.32
