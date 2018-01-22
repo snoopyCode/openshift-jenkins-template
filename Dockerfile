@@ -2,16 +2,21 @@
 FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 # Setup environment variables
+ENV OPENSHIFT_ENABLE_OAUTH true
+ENV OPENSHIFT_ENABLE_REDIRECT_PROMPT true
 ENV OPENSHIFT_JENKINS_JVM_ARCH i386
+ENV KUBERNETES_MASTER https://kubernetes.default:443
+ENV KUBERNETES_TRUST_CERTIFICATES true
 
+# Create Post-initialization script folder
 RUN mkdir /var/lib/jenkins/init.groovy.d
 
 # Configure Proxy for PluginManager
-COPY src/configure-proxy-for-pluginmanager.groovy /var/lib/jenkins/groovy.d/configure-proxy-for-pluginmanager.groovy
+COPY src/configure-proxy-for-pluginmanager.groovy /var/lib/jenkins/init.groovy.d/configure-proxy-for-pluginmanager.groovy
 
 # Install plugins
-COPY plugins.txt /opt/openshift/configuration/plugins.txt
-RUN /usr/local/bin/install-plugins.sh /opt/openshift/configuration/plugins.txt
+#COPY plugins.txt /opt/openshift/configuration/plugins.txt
+#RUN /usr/local/bin/install-plugins.sh /opt/openshift/configuration/plugins.txt
 
 # Configure "Globale Credentials"
 #COPY src/configure-global-credentials.groovy /usr/share/jenkins/ref/init.groovy.d/configure-global-credentials.groovy
