@@ -3,6 +3,13 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 MAINTAINER Chris Troeger (christopher.troeger@iteratec.de)
 
+#FIXME for testing, should be set in BuildConfig..
+ENV USE_PROXY true
+ENV PROXY_USER_FROM_SECRET foo_user
+ENV PROXY_PASS_FROM_SECRET foo_pass
+ENV NEXUS_NPM_REPO_TOKEN_FROM_SECRET foo_nexustoken
+ENV MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET foo_maventoken
+
 # Setup environment variables
 ENV OPENSHIFT_JENKINS_JVM_ARCH i386
 ENV OPENSHIFT_ENABLE_OAUTH true

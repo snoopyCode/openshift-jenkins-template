@@ -31,23 +31,26 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 //        "pps-ea-ppsea-ssh")
 //)
 
+
+if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
 // "http-proxy" for npm builds
-println("Creating \"http-proxy\" secret text..")
-store.addCredentials(domain, new StringCredentialsImpl(
-        CredentialsScope.GLOBAL,
-        "http-proxy",
-        "http-proxy",
-        Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
-)
+    println("Creating \"http-proxy\" secret text..")
+    store.addCredentials(domain, new StringCredentialsImpl(
+            CredentialsScope.GLOBAL,
+            "http-proxy",
+            "http-proxy",
+            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
+    )
 
 // "https-proxy" for npm builds
-println("Creating \"https-proxy\" secret text..")
-store.addCredentials(domain, new StringCredentialsImpl(
-        CredentialsScope.GLOBAL,
-        "https-proxy",
-        "https-proxy",
-        Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
-)
+    println("Creating \"https-proxy\" secret text..")
+    store.addCredentials(domain, new StringCredentialsImpl(
+            CredentialsScope.GLOBAL,
+            "https-proxy",
+            "https-proxy",
+            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
+    )
+}
 
 // "nexus-npm-repo-token" for npm builds
 println("Creating \"nexus-npm-repo-token\" secret text..")

@@ -1,6 +1,7 @@
 import org.jenkinsci.plugins.scriptsecurity.scripts.ScriptApproval
 
-println("Configuring in-process script approval")
+// Set approved scripts
+println("Configuring in-process script approval..")
 def scriptApproval = ScriptApproval.get()
 scriptApproval.approveSignature("method hudson.plugins.git.BranchSpec getName")
 scriptApproval.approveSignature("method hudson.plugins.git.GitSCM getBranches")

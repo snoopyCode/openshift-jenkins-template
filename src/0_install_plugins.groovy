@@ -5,17 +5,21 @@ import hudson.model.UpdateCenter
 import jenkins.RestartRequiredException
 
 
-println("Setting up proxy..")
 def env = System.getenv()
 def instance = Jenkins.getInstance()
-instance.proxy = new hudson.ProxyConfiguration(
-        "proxy.muc",
-        8080,
-        env["PROXY_USER_FROM_SECRET"],
-        env["PROXY_PASS_FROM_SECRET"],
-        "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"
-)
-instance.save()
+if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
+    def proxyUser = env["PROXY_USER_FROM_SECRET"]
+    def proxyPass = env["PROXY_PASS_FROM_SECRET"]
+    println("Setting up proxy..")
+    instance.proxy = new hudson.ProxyConfiguration(
+            "proxy.muc",
+            8080,
+            proxyUser,
+            proxyPass,
+            "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"
+    )
+    instance.save()
+}
 //FIXME use specific plugin versions
 //maven-plugin:3.0
 //nodejs:1.2.4
@@ -40,6 +44,7 @@ queue.add(updateCenter.getPlugin("kubernetes").deploy())
 queue.add(updateCenter.getPlugin("openshift-sync").deploy())
 queue.add(updateCenter.getPlugin("openshift-login").deploy())
 queue.add(updateCenter.getPlugin("openshift-pipeline").deploy())
+queue.add(updateCenter.getPlugin("openshift-client").deploy())
 queue.add(updateCenter.getPlugin("pipeline-npm").deploy())
 queue.collect { it.get() }
 if (updateCenter.isRestartRequiredForCompletion()) {
