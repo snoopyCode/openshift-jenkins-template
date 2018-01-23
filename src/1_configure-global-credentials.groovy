@@ -11,6 +11,7 @@ import org.apache.commons.fileupload.disk.*
 import org.jenkinsci.plugins.plaincredentials.*
 import org.jenkinsci.plugins.plaincredentials.impl.*
 
+
 domain = Domain.global()
 store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
@@ -26,25 +27,28 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 //)
 
 // "http-proxy" for npm builds
+println("Creating \"http-proxy\" secret text..")
 store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "http-proxy",
         "http-proxy",
-        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080"))
+        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080")) //TODO hide this in a secret
 )
 
-// "http-proxy" for npm builds
+// "https-proxy" for npm builds
+println("Creating \"https-proxy\" secret text..")
 store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "https-proxy",
         "https-proxy",
-        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080"))
+        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080")) ///TODO hide this in a secret
 )
 
 // "nexus-npm-repo-token" for npm builds
+println("Creating \"nexus-npm-repo-token\" secret text..")
 store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "nexus-npm-repo-token",
         "nexus-npm-repo-token",
-        Secret.fromString("TODO_TOKEN"))
+        Secret.fromString("TODO_TOKEN")) //TODO hide this in a secret
 )

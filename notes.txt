@@ -1,0 +1,14 @@
+http://javadoc.jenkins.io/
+http://espinosa.io/blog/2014-10-17-jenkins-plugin-management-in-groovy.html
+https://github.com/coreos/jenkins-os/blob/master/init.groovy
+
+https://docs.openshift.com/enterprise/3.1/using_images/other_images/jenkins.html
+https://github.com/openshift/origin/blob/master/examples/jenkins/jenkins-persistent-template.json
+https://github.com/openshift/jenkins
+https://ifritltd.com/2017/07/23/dockerizing-jenkins-2-maven-deploy-plugin-and-jfrog-artifactory/
+https://devops.datenkollektiv.de/one-click-jenkins-setup.html
+
+https://github.com/jenkinsci/docker
+https://github.com/openshift/origin/tree/master/examples/jenkins
+https://github.com/glenjamin/jenkins-groovy-examples/blob/master/README.md
+https://wiki.jenkins.io/display/JENKINS/Add+a+Maven+Installation,+Tool+Installation,+Modify+System+Config

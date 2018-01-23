@@ -1,36 +1,28 @@
 # Source: https://github.com/openshift/jenkins/blob/master/2/Dockerfile.rhel7
 FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
+MAINTAINER Chris Troeger (christopher.troeger@iteratec.de)
+
 # Setup environment variables
-ENV OPENSHIFT_ENABLE_OAUTH true
-ENV OPENSHIFT_ENABLE_REDIRECT_PROMPT true
 ENV OPENSHIFT_JENKINS_JVM_ARCH i386
-ENV KUBERNETES_MASTER https://kubernetes.default:443
-ENV KUBERNETES_TRUST_CERTIFICATES true
+#ENV OPENSHIFT_ENABLE_OAUTH true
+#ENV OPENSHIFT_ENABLE_REDIRECT_PROMPT true
+#ENV KUBERNETES_MASTER https://kubernetes.default:443
+#ENV KUBERNETES_TRUST_CERTIFICATES true
 
-# Create Post-initialization script folder
-RUN mkdir /var/lib/jenkins/init.groovy.d
-
-# Configure Proxy for PluginManager
-COPY src/configure-proxy-for-pluginmanager.groovy /var/lib/jenkins/init.groovy.d/configure-proxy-for-pluginmanager.groovy
+# Copy config file templates
+COPY resources/* /usr/tmp/
 
 # Install plugins
-#COPY plugins.txt /opt/openshift/configuration/plugins.txt
-#RUN /usr/local/bin/install-plugins.sh /opt/openshift/configuration/plugins.txt
+#COPY plugins/* /opt/openshift/plugins/
+#RUN /usr/local/bin/install-plugins.sh < /usr/tmp/plugins.txt
+#RUN mkdir /opt/openshift/plugins/
+#RUN /usr/local/bin/install-plugins.sh maven-plugin:3.0
+#nodejs:1.2.4 docker-plugin:1.0.4 kubernetes:1.1.3 openshift-sync:0.1.32 openshift-login:1.0.0 openshift-pipeline:1.0.52 config-file-provider:2.16.4 pipeline-npm:0.9.1
 
-# Configure "Globale Credentials"
-#COPY src/configure-global-credentials.groovy /usr/share/jenkins/ref/init.groovy.d/configure-global-credentials.groovy
 
-# Configure "Managed files"
-#COPY src/configure-managed-files.groovy /usr/share/jenkins/ref/init.groovy.d/configure-managed-files.groovy
+# Copy post-init scripts
+RUN mkdir /var/lib/jenkins/init.groovy.d
+COPY src/* /var/lib/jenkins/init.groovy.d/
 
-# Configure "In-process Script Approval"
-#COPY resources/jenkins/configuration/scriptApproval.xml /var/lib/jenkins/scriptApproval.xml
-#COPY src/configure-in-process-script-approval.groovy /usr/share/jenkins/ref/init.groovy.d/configure-in-process-script-approval.groovy
-
-# Configure "Global Tool Configuration"
-#COPY src/configure-global-tools.groovy /usr/share/jenkins/ref/init.groovy.d/configure-global-tools.groovy
-
-# Configure Jenkins itself
-#COPY src/configure-jenkins-itself.groovy /usr/share/jenkins/ref/init.groovy.d/configure-jenkins-itself.groovy
 
