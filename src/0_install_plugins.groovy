@@ -7,15 +7,14 @@ import jenkins.RestartRequiredException
 
 println("Setting up proxy..")
 def instance = Jenkins.getInstance()
-//FIXME disabled
-//instance.proxy = new hudson.ProxyConfiguration(
-//        "proxy.muc",
-//        8080,
-//        "TODO_ADD_PROXY_USER", //TODO
-//        "TODO_ADD_PROXY_PASS", //TODO
-//        "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"
-//)
-//instance.save()
+instance.proxy = new hudson.ProxyConfiguration(
+        "proxy.muc",
+        8080,
+        "${PROXY_USER_FROM_SECRET}",
+        "${PROXY_PASS_FROM_SECRET}",
+        "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"
+)
+instance.save()
 //FIXME use specific plugin versions
 //maven-plugin:3.0
 //nodejs:1.2.4

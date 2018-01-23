@@ -32,7 +32,7 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "http-proxy",
         "http-proxy",
-        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080")) //TODO hide this in a secret
+        Secret.fromString("http://${PROXY_USER_FROM_SECRET}:${PROXY_PASS_FROM_SECRET}@proxy.muc:8080"))
 )
 
 // "https-proxy" for npm builds
@@ -41,7 +41,7 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "https-proxy",
         "https-proxy",
-        Secret.fromString("http://TODO_USER:TODO_PASS@proxy.muc:8080")) ///TODO hide this in a secret
+        Secret.fromString("http://${PROXY_USER_FROM_SECRET}:${PROXY_PASS_FROM_SECRET}@proxy.muc:8080"))
 )
 
 // "nexus-npm-repo-token" for npm builds
@@ -50,5 +50,13 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "nexus-npm-repo-token",
         "nexus-npm-repo-token",
-        Secret.fromString("TODO_TOKEN")) //TODO hide this in a secret
+        Secret.fromString("${NEXUS_NPM_REPO_TOKEN_FROM_SECRET}"))
+)
+
+println("Creating \"maven-deployment-token\" secret text..")
+store.addCredentials(domain, new StringCredentialsImpl(
+        CredentialsScope.GLOBAL,
+        "maven-deployment-token",
+        "maven-deployment-token",
+        Secret.fromString("${MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET}"))
 )

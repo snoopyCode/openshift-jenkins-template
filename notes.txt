@@ -1,3 +1,12 @@
+https://github.com/openshift/origin/blob/master/examples/jenkins/jenkins-persistent-template.json
+
+TODO Set Secrets: https://docs.openshift.com/enterprise/3.2/dev_guide/builds.html#using-secrets
+* PROXY_USER_FROM_SECRET
+* PROXY_PASS_FROM_SECRET
+* NEXUS_NPM_REPO_TOKEN_FROM_SECRET
+* MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
+
+
 http://javadoc.jenkins.io/
 http://espinosa.io/blog/2014-10-17-jenkins-plugin-management-in-groovy.html
 https://github.com/coreos/jenkins-os/blob/master/init.groovy
