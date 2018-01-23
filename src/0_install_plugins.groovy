@@ -6,12 +6,13 @@ import jenkins.RestartRequiredException
 
 
 println("Setting up proxy..")
+def env = System.getenv()
 def instance = Jenkins.getInstance()
 instance.proxy = new hudson.ProxyConfiguration(
         "proxy.muc",
         8080,
-        "${PROXY_USER_FROM_SECRET}",
-        "${PROXY_PASS_FROM_SECRET}",
+        env["PROXY_USER_FROM_SECRET"],
+        env["PROXY_PASS_FROM_SECRET"],
         "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"
 )
 instance.save()

@@ -12,6 +12,11 @@ import org.jenkinsci.plugins.plaincredentials.*
 import org.jenkinsci.plugins.plaincredentials.impl.*
 
 
+def env = System.getenv()
+def proxyUser = env["PROXY_USER_FROM_SECRET"]
+def proxyPass = env["PROXY_PASS_FROM_SECRET"]
+def npmRepoToken = env["NEXUS_NPM_REPO_TOKEN_FROM_SECRET"]
+def mavenDeploymentToken = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
 domain = Domain.global()
 store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
@@ -32,7 +37,7 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "http-proxy",
         "http-proxy",
-        Secret.fromString("http://${PROXY_USER_FROM_SECRET}:${PROXY_PASS_FROM_SECRET}@proxy.muc:8080"))
+        Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
 )
 
 // "https-proxy" for npm builds
@@ -41,7 +46,7 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "https-proxy",
         "https-proxy",
-        Secret.fromString("http://${PROXY_USER_FROM_SECRET}:${PROXY_PASS_FROM_SECRET}@proxy.muc:8080"))
+        Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
 )
 
 // "nexus-npm-repo-token" for npm builds
@@ -50,7 +55,7 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "nexus-npm-repo-token",
         "nexus-npm-repo-token",
-        Secret.fromString("${NEXUS_NPM_REPO_TOKEN_FROM_SECRET}"))
+        Secret.fromString(npmRepoToken))
 )
 
 println("Creating \"maven-deployment-token\" secret text..")
@@ -58,5 +63,5 @@ store.addCredentials(domain, new StringCredentialsImpl(
         CredentialsScope.GLOBAL,
         "maven-deployment-token",
         "maven-deployment-token",
-        Secret.fromString("${MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET}"))
+        Secret.fromString(mavenDeploymentToken))
 )
