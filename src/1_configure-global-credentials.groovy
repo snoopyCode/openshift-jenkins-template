@@ -13,10 +13,11 @@ import org.jenkinsci.plugins.plaincredentials.impl.*
 
 
 def env = System.getenv()
-def proxyUser = env["PROXY_USER_FROM_SECRET"]
-def proxyPass = env["PROXY_PASS_FROM_SECRET"]
-def npmRepoToken = env["NEXUS_NPM_REPO_TOKEN_FROM_SECRET"]
-def mavenDeploymentToken = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
+String npmRepoTokenBase64 = env["NEXUS_NPM_REPO_TOKEN_FROM_SECRET"]
+String mavenDeploymentTokenBase64 = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
+String npmRepoToken = new String(npmRepoTokenBase64.decodeBase64())
+String mavenDeploymentToken = new String(mavenDeploymentTokenBase64.decodeBase64())
+
 domain = Domain.global()
 store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
 
@@ -33,7 +34,12 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 
 
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
-// "http-proxy" for npm builds
+
+    String proxyUserBase64 = env["PROXY_USER_FROM_SECRET"]
+    String proxyPassBase64 = env["PROXY_PASS_FROM_SECRET"]
+    String proxyUser = new String(proxyUserBase64.decodeBase64())
+    String proxyPass = new String(proxyPassBase64.decodeBase64())
+    // "http-proxy" for npm builds
     println("Creating \"http-proxy\" secret text..")
     store.addCredentials(domain, new StringCredentialsImpl(
             CredentialsScope.GLOBAL,
@@ -42,7 +48,7 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
             Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@proxy.muc:8080"))
     )
 
-// "https-proxy" for npm builds
+    // "https-proxy" for npm builds
     println("Creating \"https-proxy\" secret text..")
     store.addCredentials(domain, new StringCredentialsImpl(
             CredentialsScope.GLOBAL,
