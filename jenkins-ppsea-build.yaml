@@ -12,10 +12,12 @@ spec:
     sourceSecret:
       name: ppsea-ssh
   strategy:
-    type: Docker
-    dockerStrategy:
-      noCache: true
-      dockerfilePath: Dockerfile
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: jenkins-2-rhel7:latest
+        namespace: registry.access.redhat.com/openshift3
+    type: Source
   output:
     to:
       kind: ImageStreamTag

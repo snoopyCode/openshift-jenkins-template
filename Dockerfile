@@ -2,10 +2,11 @@
 FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 # Copy config file templates
-COPY resources/* /usr/tmp/
+RUN mkdir /var/lib/jenkins/configFileTemplates
+COPY configuration/configFileTemplates/* /var/lib/jenkins/configFileTemplates/
 
 # Copy post-init scripts
 RUN mkdir /var/lib/jenkins/init.groovy.d
-COPY src/* /var/lib/jenkins/init.groovy.d/
+COPY configuration/init.groovy.d/* /var/lib/jenkins/init.groovy.d/
 
 
