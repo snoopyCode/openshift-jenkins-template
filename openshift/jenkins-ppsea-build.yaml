@@ -9,13 +9,18 @@ spec:
       uri: 'ssh://git@git.bmwgroup.net:7999/ppsea/jenkins-template.git'
     sourceSecret:
       name: ppsea-ssh
+#  strategy:
+#    type: Source
+#    sourceStrategy:
+#      from:
+#        kind: ImageStreamTag
+#        name: jenkins:latest
+#        namespace: openshift
   strategy:
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        name: jenkins:latest
-        namespace: openshift
-    type: Source
+    type: Docker
+    dockerStrategy:
+      noCache: true
+      dockerfilePath: Dockerfile
   output:
     to:
       kind: ImageStreamTag
