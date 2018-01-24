@@ -49,6 +49,7 @@ queue.add(updateCenter.getPlugin("openshift-login").deploy())
 queue.add(updateCenter.getPlugin("openshift-pipeline").deploy())
 queue.add(updateCenter.getPlugin("openshift-client").deploy())
 queue.add(updateCenter.getPlugin("pipeline-npm").deploy())
+queue.add(updateCenter.getPlugin("pipeline-model-api").deploy())
 queue.collect { it.get() }
 if (updateCenter.isRestartRequiredForCompletion()) {
     println("Restart required")
