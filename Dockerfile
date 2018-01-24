@@ -12,7 +12,7 @@ RUN mkdir /opt/openshift/configuration/init.groovy.d
 COPY configuration/init.groovy.d/* /opt/openshift/configuration/init.groovy.d/
 
 # FIXME try to create something directly in /var/lib/jenkins
-COPY notes.txt var/lib/jenkins/notes.txt
+COPY notes.txt /var/lib/jenkins/notes.txt
 
 # Copy config file templates
 #RUN mkdir /var/lib/jenkins/configFileTemplates
