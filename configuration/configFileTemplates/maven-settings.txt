@@ -6,17 +6,17 @@
     <server>
       <id>nexus</id>
       <username>deployment</username>
-      <password>${MAVEN_DEPLOYMENT_TOKEN}</password>
+      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
     </server>
     <server>
       <id>nexus-snapshots</id>
       <username>deployment</username>
-      <password>${MAVEN_DEPLOYMENT_TOKEN}</password>
+      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
     </server>
     <server>
       <id>nexus-releases</id>
       <username>deployment</username>
-      <password>${MAVEN_DEPLOYMENT_TOKEN}</password>
+      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
     </server>
   </servers>
 
