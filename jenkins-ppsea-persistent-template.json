@@ -338,7 +338,7 @@
       "name": "NAMESPACE",
       "displayName": "Jenkins ImageStream Namespace",
       "description": "The OpenShift Namespace where the Jenkins ImageStream resides.",
-      "value": "ppsea",
+      "value": "pps-ea",
       "required": true
     },
     {
