@@ -3,6 +3,9 @@ FROM registry.access.redhat.com/openshift3/jenkins-2-rhel7
 
 MAINTAINER Chris Troeger <Christopher.Troeger@iteratec.de>
 
+# Enable override of persisten volume config from image config
+ENV OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG true
+
 # Copy config file templates
 RUN mkdir /opt/openshift/configuration/configFileTemplates
 COPY configuration/configFileTemplates/* /opt/openshift/configuration/configFileTemplates/
