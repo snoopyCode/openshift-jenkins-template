@@ -1,6 +1,6 @@
 import jenkins.model.*
 
-// Set update center proxy
+// Set UpdateCenter proxy
 def env = System.getenv()
 def instance = Jenkins.getInstance()
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
@@ -8,7 +8,7 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     String proxyPassBase64 = env["PROXY_PASS_FROM_SECRET"]
     String proxyUser = new String(proxyUserBase64.decodeBase64())
     String proxyPass = new String(proxyPassBase64.decodeBase64())
-    println("Setting up update center proxy..")
+    println("Setting up UpdateCenter proxy..")
     instance.proxy = new hudson.ProxyConfiguration(
             "proxy.muc",
             8080,
@@ -19,8 +19,8 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     instance.save()
 }
 
-// Refresh Update center
-println("Refreshing update center..")
+// Refresh UpdateCenter
+println("Refreshing UpdateCenter..")
 def updateCenter = instance.updateCenter
 updateCenter.updateAllSites()
 
