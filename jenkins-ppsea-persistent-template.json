@@ -166,7 +166,7 @@
                     }
                   },
                   {
-                    "name": "PROXY_USER_FROM_SECRET",
+                    "name": "PROXY_PASS_FROM_SECRET",
                     "valueFrom": {
                       "secretKeyRef": {
                         "name": "jenkins-ppsea-secret",
