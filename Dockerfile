@@ -21,8 +21,3 @@ COPY notes.txt /var/lib/jenkins/notes.txt
 # Copy post-init scripts
 #RUN mkdir /var/lib/jenkins/init.groovy.d
 #COPY configuration/init.groovy.d/* /var/lib/jenkins/init.groovy.d/
-
-# Overwrite the parent entrypoint and start the source-to-image run (Source: https://github.com/openshift/jenkins/blob/master/2/contrib/s2i/run )
-USER 1001
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["/usr/libexec/s2i/run"]

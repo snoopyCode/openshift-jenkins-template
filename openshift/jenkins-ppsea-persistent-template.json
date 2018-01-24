@@ -145,6 +145,10 @@
                     "value": "true"
                   },
                   {
+                    "name": "OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG",
+                    "value": "true"
+                  },
+                  {
                     "name": "JENKINS_SERVICE_NAME",
                     "value": "${JENKINS_SERVICE_NAME}"
                   },
