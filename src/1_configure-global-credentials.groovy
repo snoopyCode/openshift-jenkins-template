@@ -12,27 +12,17 @@ import org.jenkinsci.plugins.plaincredentials.*
 import org.jenkinsci.plugins.plaincredentials.impl.*
 
 
+domain = Domain.global()
+store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
+
+// Get credentials from environment
 def env = System.getenv()
 String npmRepoTokenBase64 = env["NEXUS_NPM_REPO_TOKEN_FROM_SECRET"]
 String mavenDeploymentTokenBase64 = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
 String npmRepoToken = new String(npmRepoTokenBase64.decodeBase64())
 String mavenDeploymentToken = new String(mavenDeploymentTokenBase64.decodeBase64())
 
-domain = Domain.global()
-store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.SystemCredentialsProvider')[0].getStore()
-
-//TODO should be set by-default using the openshift jenkins image
-// "pps-ea-ppsea-ssh" for OpenShift integration
-//store.addCredentials(domain, new BasicSSHUserPrivateKey(
-//        CredentialsScope.GLOBAL,
-//        "pps-ea-ppsea-ssh",
-//        "default",
-//        new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource("TODO_ADD_PRIVATE_KEY"),
-//        "",
-//        "pps-ea-ppsea-ssh")
-//)
-
-
+// Set proxy
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     String proxyUserBase64 = env["PROXY_USER_FROM_SECRET"]
     String proxyPassBase64 = env["PROXY_PASS_FROM_SECRET"]

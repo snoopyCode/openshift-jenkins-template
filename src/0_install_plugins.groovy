@@ -5,7 +5,7 @@ import hudson.model.UpdateCenter
 import jenkins.RestartRequiredException
 
 
-//FIXME might use this https://github.com/openshift/jenkins-client-plugin#hello-world
+// Set proxy
 def env = System.getenv()
 def instance = Jenkins.getInstance()
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
@@ -23,6 +23,12 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     )
     instance.save()
 }
+
+// Install plugins
+println("Installing plugins..")
+def updateCenter = instance.updateCenter
+updateCenter.updateAllSites()
+def queue = new LinkedBlockingQueue<Future<UpdateCenter>>()
 //FIXME use specific plugin versions
 //maven-plugin:3.0
 //nodejs:1.2.4
@@ -33,12 +39,6 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
 //openshift-pipeline:1.0.52
 //config-file-provider:2.16.4
 //pipeline-npm:0.9.1
-
-
-println("Installing plugins..")
-def updateCenter = instance.updateCenter
-updateCenter.updateAllSites()
-def queue = new LinkedBlockingQueue<Future<UpdateCenter>>()
 queue.add(updateCenter.getPlugin("config-file-provider").deploy())
 queue.add(updateCenter.getPlugin("maven-plugin").deploy())
 queue.add(updateCenter.getPlugin("nodejs").deploy())
