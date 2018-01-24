@@ -140,6 +140,12 @@
                     "value": "${JNLP_SERVICE_NAME}"
                   },
                   {
+                    "name": "http_proxy"
+                  },
+                  {
+                    "name": "https_proxy"
+                  },
+                  {
                     "name": "USE_PROXY",
                     "value": "${USE_PROXY}"
                   },

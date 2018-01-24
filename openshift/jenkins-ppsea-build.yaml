@@ -19,6 +19,10 @@ spec:
       env:
         - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
           value: 'true'
+        - name: http_proxy
+          value: 'http://PROXY_USER:PROXY_PASS@proxy.muc:8080'
+        - name: https_proxy
+          value: 'http://PROXY_USER:PROXY_PASS@proxy.muc:8080'
   output:
     to:
       kind: ImageStreamTag

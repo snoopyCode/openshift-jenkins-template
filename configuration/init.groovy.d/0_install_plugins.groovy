@@ -1,11 +1,6 @@
 import jenkins.model.*
-import java.util.concurrent.Future
-import java.util.concurrent.LinkedBlockingQueue
-import hudson.model.UpdateCenter
-import jenkins.RestartRequiredException
 
-
-// Set proxy
+// Set update center proxy
 def env = System.getenv()
 def instance = Jenkins.getInstance()
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
@@ -13,7 +8,7 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     String proxyPassBase64 = env["PROXY_PASS_FROM_SECRET"]
     String proxyUser = new String(proxyUserBase64.decodeBase64())
     String proxyPass = new String(proxyPassBase64.decodeBase64())
-    println("Setting up proxy..")
+    println("Setting up update center proxy..")
     instance.proxy = new hudson.ProxyConfiguration(
             "proxy.muc",
             8080,
@@ -24,27 +19,8 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     instance.save()
 }
 
-//// Install plugins
-//println("Installing plugins..")
-//def updateCenter = instance.updateCenter
-//updateCenter.updateAllSites()
-//def queue = new LinkedBlockingQueue<Future<UpdateCenter>>()
-//queue.add(updateCenter.getPlugin("config-file-provider").deploy())
-//queue.add(updateCenter.getPlugin("maven-plugin").deploy())
-//queue.add(updateCenter.getPlugin("nodejs").deploy())
-//queue.add(updateCenter.getPlugin("docker-plugin").deploy())
-//queue.add(updateCenter.getPlugin("kubernetes").deploy())
-//queue.add(updateCenter.getPlugin("openshift-sync").deploy())
-//queue.add(updateCenter.getPlugin("openshift-login").deploy())
-//queue.add(updateCenter.getPlugin("openshift-pipeline").deploy())
-//queue.add(updateCenter.getPlugin("openshift-client").deploy())
-//queue.add(updateCenter.getPlugin("pipeline-npm").deploy())
-//queue.add(updateCenter.getPlugin("pipeline-model-api").deploy())
-//queue.collect { it.get() }
-//if (updateCenter.isRestartRequiredForCompletion()) {
-//    println("Restart required")
-//    Jenkins.instance.restart()
-//    throw new RestartRequiredException(null)
-//} else {
-//    println("Installing plugins done")
-//}
+// Refresh Update center
+println("Refreshing update center..")
+def updateCenter = instance.updateCenter
+updateCenter.updateAllSites()
+
