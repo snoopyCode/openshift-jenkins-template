@@ -249,7 +249,7 @@ parameters:
   - name: MEMORY_LIMIT
     displayName: 'Memory Limit'
     description: 'Maximum amount of memory the container can use.'
-    value: '2Gi'
+    value: '4Gi'
     required: true
   - name: NAMESPACE
     displayName: 'Jenkins ImageStream Namespace'
