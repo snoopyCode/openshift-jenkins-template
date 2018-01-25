@@ -237,13 +237,13 @@ parameters:
     value: 'ssh://git@git.bmwgroup.net:7999/ppsea/jenkins-template.git'
     required: true
   - name: GIT_SECRET
-    displayName: 'openshift ssh-name of the secret'
-    description: 'Secret of the git repository'
+    displayName: 'Openshift SSH GIT Secret Name'
+    description: 'The secret to clone the git repository'
     value: 'ppsea-ssh'
     required: true
   - name: HTTP_PROXY_URL_FOR_BUILDCONFIG
     displayName: 'Proxy URL for BuildConfig'
-    description: 'The complete proxy URL for usage in the build config (relevant for plugin download)'
+    description: 'The complete proxy URL for usage in the build config (relevant for plugin download).'
     value: 'http://USER:PASS@proxy.muc:8080'
     required: true
   - name: MEMORY_LIMIT
@@ -268,22 +268,22 @@ parameters:
     required: true
   - name: PROXY_USER_BASE_64
     displayName: 'Proxy User'
-    description: 'The user for proxy authentication (Base64 double-encoded)'
+    description: 'The user for proxy authentication (Base64 double-encoded).'
     value: ''
     required: true
   - name: PROXY_PASS_BASE_64
     displayName: 'Proxy Password'
-    description: 'The password for proxy authentication (Base64 double-encoded)'
+    description: 'The password for proxy authentication (Base64 double-encoded).'
     value: ''
     required: true
   - name: NEXUS_NPM_REPO_TOKEN_BASE64
     displayName: Nexus NPM Token
-    description: 'The Base64 Token for npm Nexus Auth (Base64 double-encoded)'
+    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 triple-encoded).'
     value: ''
     required: true
   - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
     displayName: 'Maven Deployment Token'
-    description: 'The Maven Deployment Token for Nexus auth (Base64 double-encoded)'
+    description: 'The Maven Deployment Token for Nexus auth (Base64 double-encoded).'
     value: ''
     required: true
 labels:
