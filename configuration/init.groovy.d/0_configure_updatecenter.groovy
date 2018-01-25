@@ -21,6 +21,5 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
 
 // Refresh UpdateCenter
 println("Refreshing UpdateCenter..")
-def updateCenter = instance.updateCenter
-updateCenter.updateAllSites()
-
+instance.pluginManager.doCheckUpdatesServer()
+instance.updateCenter.updateAllSites()
