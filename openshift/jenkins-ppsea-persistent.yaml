@@ -1,0 +1,312 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: jenkins-ppsea-persistent
+  labels:
+    app: jenkins-ppsea-persistent
+    template: jenkins-ppsea-persistent-template
+  annotations:
+    description: Fully configured ready-to-use Jenkins Service.
+    iconClass: icon-jenkins
+    openshift.io/display-name: Jenkins PPSEA (Persistent)
+    tags: 'instant-app,jenkins'
+message: >-
+  A Jenkins service has been created in your project. Log into Jenkins with your
+  OpenShift account.
+objects:
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+     name: '${JENKINS_SERVICE_NAME}-secret'
+    data:
+     proxy-user: '${PROXY_USER_BASE_64}'
+     proxy-pass: '${PROXY_PASS_BASE_64}'
+     nexus-npm-repo-token: '${NEXUS_NPM_REPO_TOKEN_BASE64}'
+     maven-deployment-token: '${MAVEN_DEPLOYMENT_TOKEN_BASE64}'
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}'
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: '${VOLUME_CAPACITY}'
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}'
+      annotations:
+        template.openshift.io/expose-uri: 'http://{.spec.host}{.spec.path}'
+    spec:
+      to:
+        kind: Service
+        name: '${JENKINS_SERVICE_NAME}'
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+     name: '${JENKINS_SERVICE_NAME}-build'
+    spec:
+      source:
+        type: Git
+        git:
+          uri: '${GIT_URL}'
+        sourceSecret:
+          name: '${GIT_SECRET}'
+      strategy:
+         type: Source
+         sourceStrategy:
+          from:
+            kind: ImageStreamTag
+            name: 'jenkins:latest'
+            namespace: openshift
+          env:
+            - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
+              value: 'true'
+            - name: http_proxy
+              value: '${HTTP_PROXY_URL_FOR_BUILDCONFIG}'
+            - name: https_proxy
+              value: '${HTTP_PROXY_URL_FOR_BUILDCONFIG}'
+      output:
+        to:
+          kind: ImageStreamTag
+          name: '${JENKINS_SERVICE_NAME}-image:latest'
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+     name: '${JENKINS_SERVICE_NAME}-image'
+    spec: {}
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}'
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: 'true'
+    spec:
+      strategy:
+        type: Recreate
+      triggers:
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${JENKINS_SERVICE_NAME}'
+            from:
+              kind: ImageStreamTag
+              name: '${JENKINS_IMAGE_STREAM_TAG}'
+              namespace: '${NAMESPACE}'
+            lastTriggeredImage: ''
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        name: '${JENKINS_SERVICE_NAME}'
+      template:
+        metadata:
+          labels:
+            name: '${JENKINS_SERVICE_NAME}'
+        spec:
+          serviceAccountName: '${JENKINS_SERVICE_NAME}'
+          containers:
+            - name: '${JENKINS_SERVICE_NAME}'
+              image: ' '
+              readinessProbe:
+                timeoutSeconds: 3
+                initialDelaySeconds: 3
+                httpGet:
+                  path: /login
+                  port: 8080
+              livenessProbe:
+                timeoutSeconds: 3
+                initialDelaySeconds: 420
+                failureThreshold: 30
+                httpGet:
+                  path: /login
+                  port: 8080
+              env:
+                - name: OPENSHIFT_JENKINS_JVM_ARCH
+                  value: i386
+                - name: OPENSHIFT_ENABLE_OAUTH
+                  value: 'true'
+                - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+                  value: 'true'
+                - name: KUBERNETES_MASTER
+                  value: 'https://kubernetes.default:443'
+                - name: KUBERNETES_TRUST_CERTIFICATES
+                  value: 'true'
+                - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
+                  value: 'true'
+                - name: JENKINS_SERVICE_NAME
+                  value: '${JENKINS_SERVICE_NAME}'
+                - name: JNLP_SERVICE_NAME
+                  value: '${JNLP_SERVICE_NAME}'
+                - name: USE_PROXY
+                  value: '${USE_PROXY}'
+                - name: http_proxy
+                - name: https_proxy
+                - name: PROXY_USER_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: proxy-user
+                - name: PROXY_PASS_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: proxy-pass
+                - name: NEXUS_NPM_REPO_TOKEN_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: nexus-npm-repo-token
+                - name: MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: maven-deployment-token
+              resources:
+                limits:
+                  memory: '${MEMORY_LIMIT}'
+              volumeMounts:
+                - name: '${JENKINS_SERVICE_NAME}-data'
+                  mountPath: /var/lib/jenkins
+              terminationMessagePath: /dev/termination-log
+              imagePullPolicy: IfNotPresent
+              capabilities: {}
+              securityContext:
+                capabilities: {}
+                privileged: false
+          volumes:
+            - name: '${JENKINS_SERVICE_NAME}-data'
+              persistentVolumeClaim:
+                claimName: '${JENKINS_SERVICE_NAME}'
+          restartPolicy: Always
+          dnsPolicy: ClusterFirst
+  - kind: ServiceAccount
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}'
+      annotations:
+        serviceaccounts.openshift.io/oauth-redirectreference.jenkins: >-
+          {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${JENKINS_SERVICE_NAME}"}}
+  - kind: RoleBinding
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}_edit'
+    groupNames: null
+    subjects:
+      - kind: ServiceAccount
+        name: '${JENKINS_SERVICE_NAME}'
+    roleRef:
+      name: edit
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: '${JNLP_SERVICE_NAME}'
+    spec:
+      ports:
+        - name: agent
+          protocol: TCP
+          port: 50000
+          targetPort: 50000
+          nodePort: 0
+      selector:
+        name: '${JENKINS_SERVICE_NAME}'
+      type: ClusterIP
+      sessionAffinity: None
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: '${JENKINS_SERVICE_NAME}'
+      annotations:
+        service.alpha.openshift.io/dependencies: '[{"name": "${JNLP_SERVICE_NAME}", "namespace": "", "kind": "Service"}]'
+        service.openshift.io/infrastructure: 'true'
+    spec:
+      ports:
+        - name: web
+          protocol: TCP
+          port: 80
+          targetPort: 8080
+          nodePort: 0
+      selector:
+        name: '${JENKINS_SERVICE_NAME}'
+      type: ClusterIP
+      sessionAffinity: None
+parameters:
+  - name: JENKINS_SERVICE_NAME
+    displayName: 'Jenkins Service Name'
+    description: 'The name of the OpenShift Service exposed for the Jenkins container.'
+    value: 'jenkins-ppsea'
+    required: true
+  - name: JNLP_SERVICE_NAME
+    displayName: 'Jenkins JNLP Service Name'
+    description: 'The name of the service used for master/slave communication.'
+    value: 'jenkins-ppsea-jnlp'
+    required: true
+  - name: GIT_URL
+    displayName: 'Git URL'
+    description: 'The Git URL to the Jenkins-Template Repo'
+    value: 'ssh://git@git.bmwgroup.net:7999/ppsea/jenkins-template.git'
+    required: true
+  - name: GIT_SECRET
+    displayName: 'Openshift SSH GIT Secret Name'
+    description: 'The secret to clone the git repository'
+    value: 'ppsea-ssh'
+    required: true
+  - name: HTTP_PROXY_URL_FOR_BUILDCONFIG
+    displayName: 'Proxy URL for BuildConfig'
+    description: 'The complete proxy URL for usage in the build config (relevant for plugin download).'
+    value: 'http://USER:PASS@proxy.muc:8080'
+    required: true
+  - name: MEMORY_LIMIT
+    displayName: 'Memory Limit'
+    description: 'Maximum amount of memory the container can use.'
+    value: '4Gi'
+    required: true
+  - name: VOLUME_CAPACITY
+    displayName: 'Volume Capacity'
+    description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    value: '5Gi'
+    required: true
+  - name: NAMESPACE
+    displayName: 'Jenkins ImageStream Namespace'
+    description: 'The OpenShift Namespace where the Jenkins ImageStream resides.'
+    value: 'pps-ea'
+    required: true
+  - name: JENKINS_IMAGE_STREAM_TAG
+    displayName: 'Jenkins ImageStreamTag'
+    description: 'Name of the ImageStreamTag to be used for the Jenkins image.'
+    value: 'jenkins-ppsea-image:latest'
+    required: true
+  - name: USE_PROXY
+    displayName: 'Use a proxy'
+    description: 'Whether to use a proxy, might be required for Jenkins Plugin download.'
+    value: 'true'
+    required: true
+  - name: PROXY_USER_BASE_64
+    displayName: 'Proxy User'
+    description: 'The user for proxy authentication (Base64 double-encoded).'
+    value: ''
+    required: true
+  - name: PROXY_PASS_BASE_64
+    displayName: 'Proxy Password'
+    description: 'The password for proxy authentication (Base64 double-encoded).'
+    value: ''
+    required: true
+  - name: NEXUS_NPM_REPO_TOKEN_BASE64
+    displayName: Nexus NPM Token
+    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 triple-encoded).'
+    value: ''
+    required: true
+  - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
+    displayName: 'Maven Deployment Token'
+    description: 'The Maven Deployment Token for Nexus auth (Base64 double-encoded).'
+    value: ''
+    required: true
+labels:
+  app: jenkins-ppsea-persistent
+  template: jenkins-ppsea-persistent-template
