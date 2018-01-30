@@ -66,7 +66,6 @@ objects:
         to:
           kind: ImageStreamTag
           name: '${JENKINS_SERVICE_NAME}-image:latest'
-
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -89,7 +88,7 @@ objects:
               - '${JENKINS_SERVICE_NAME}'
             from:
               kind: ImageStreamTag
-              name: '${JENKINS_IMAGE_STREAM_TAG}'
+              name: '${JENKINS_SERVICE_NAME}-image:latest'
               namespace: '${NAMESPACE}'
             lastTriggeredImage: ''
         - type: ConfigChange
@@ -255,11 +254,6 @@ parameters:
     displayName: 'Jenkins ImageStream Namespace'
     description: 'The OpenShift Namespace where the Jenkins ImageStream resides.'
     value: 'pps-ea'
-    required: true
-  - name: JENKINS_IMAGE_STREAM_TAG
-    displayName: 'Jenkins ImageStreamTag'
-    description: 'Name of the ImageStreamTag to be used for the Jenkins image.'
-    value: 'jenkins-ppsea-image:latest'
     required: true
   - name: USE_PROXY
     displayName: 'Use a proxy'
