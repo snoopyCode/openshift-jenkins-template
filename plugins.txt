@@ -32,7 +32,7 @@ workflow-aggregator:2.1
 workflow-basic-steps:2.4
 workflow-cps-global-lib:2.8
 workflow-durable-task-step:2.11
-workflow-multibranch:2.14
+workflow-multibranch:2.16
 workflow-remote-loader:1.4
 workflow-scm-step:2.4
 docker-commons:1.11
