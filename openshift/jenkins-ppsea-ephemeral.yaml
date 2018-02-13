@@ -29,7 +29,7 @@ objects:
     metadata:
       name: '${JENKINS_SERVICE_NAME}'
       annotations:
-        template.openshift.io/expose-uri: 'http://{.spec.host}{.spec.path}'
+        template.openshift.io/expose-uri: 'https://{.spec.host}{.spec.path}'
     spec:
       to:
         kind: Service
