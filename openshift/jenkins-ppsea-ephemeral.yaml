@@ -148,11 +148,6 @@ objects:
                     secretKeyRef:
                       name: '${JENKINS_SERVICE_NAME}-secret'
                       key: proxy-pass
-                - name: NEXUS_NPM_REPO_TOKEN_FROM_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: nexus-npm-repo-token
                 - name: MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
@@ -272,7 +267,7 @@ parameters:
     required: true
   - name: NEXUS_NPM_REPO_TOKEN_BASE64
     displayName: Nexus NPM Token
-    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 triple-encoded).'
+    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 double-encoded).'
     value: ''
     required: true
   - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
