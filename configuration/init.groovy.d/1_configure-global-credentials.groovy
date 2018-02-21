@@ -17,6 +17,7 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 
 // Get credentials from environment
 def env = System.getenv()
+String mavenDeploymentToken = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
 
 // Set proxy
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
