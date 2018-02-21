@@ -42,3 +42,12 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
             Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@"+ proxyHost + ":" + proxyPort))
     )
 }
+
+// "maven-deployment-token" for Maven builds
+println("Creating \"maven-deployment-token\" secret text..")
+store.addCredentials(domain, new StringCredentialsImpl(
+        CredentialsScope.GLOBAL,
+        "maven-deployment-token",
+        "maven-deployment-token",
+        Secret.fromString(mavenDeploymentToken))
+)

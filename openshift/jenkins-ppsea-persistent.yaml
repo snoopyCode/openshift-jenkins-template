@@ -170,6 +170,11 @@ objects:
                     secretKeyRef:
                       name: '${JENKINS_SERVICE_NAME}-secret'
                       key: proxy-pass
+                - name: MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: maven-deployment-token
               resources:
                 limits:
                   memory: '${MEMORY_LIMIT}'
