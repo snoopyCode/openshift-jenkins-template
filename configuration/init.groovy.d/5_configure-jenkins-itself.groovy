@@ -20,5 +20,5 @@ if (envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0) {
 } else {
     envVars = envVarsNodePropertyList.get(0).getEnvVars()
 }
-envVars.put("NO_PROXY", "nexus-pps-ea.mp-dev-cnap.bmwgroup.net")
+envVars.put("NO_PROXY", "nexus")
 instance.save()

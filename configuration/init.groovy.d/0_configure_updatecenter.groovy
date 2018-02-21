@@ -4,14 +4,14 @@ import jenkins.model.*
 def env = System.getenv()
 def instance = Jenkins.getInstance()
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
-    String proxyUserBase64 = env["PROXY_USER_FROM_SECRET"]
-    String proxyPassBase64 = env["PROXY_PASS_FROM_SECRET"]
-    String proxyUser = new String(proxyUserBase64.decodeBase64())
-    String proxyPass = new String(proxyPassBase64.decodeBase64())
+    String proxyHost = env["PROXY_HOST_FROM_SECRET"]
+    String proxyPort = env["PROXY_PORT_FROM_SECRET"]
+    String proxyUser = env["PROXY_USER_FROM_SECRET"]
+    String proxyPass = env["PROXY_PASS_FROM_SECRET"]
     println("Setting up UpdateCenter proxy..")
     instance.proxy = new hudson.ProxyConfiguration(
-            "proxy.muc",
-            8080,
+            proxyHost,
+            proxyPort.toInteger(),
             proxyUser,
             proxyPass,
             "*.muc\n*.bmwgroup.net\nlocalhost\n127.0.0.1"

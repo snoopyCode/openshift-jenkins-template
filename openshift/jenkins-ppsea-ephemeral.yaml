@@ -20,6 +20,8 @@ objects:
     metadata:
      name: '${JENKINS_SERVICE_NAME}-secret'
     data:
+     proxy-host: '${PROXY_HOST_BASE_64}'
+     proxy-port: '${PROXY_PORT_BASE_64}'
      proxy-user: '${PROXY_USER_BASE_64}'
      proxy-pass: '${PROXY_PASS_BASE_64}'
      nexus-npm-repo-token: '${NEXUS_NPM_REPO_TOKEN_BASE64}'
@@ -138,6 +140,16 @@ objects:
                   value: '${USE_PROXY}'
                 - name: http_proxy
                 - name: https_proxy
+                - name: PROXY_HOST_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: proxy-host
+                - name: PROXY_PORT_FROM_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: '${JENKINS_SERVICE_NAME}-secret'
+                      key: proxy-port
                 - name: PROXY_USER_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
@@ -148,11 +160,6 @@ objects:
                     secretKeyRef:
                       name: '${JENKINS_SERVICE_NAME}-secret'
                       key: proxy-pass
-                - name: MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: maven-deployment-token
               resources:
                 limits:
                   memory: '${MEMORY_LIMIT}'
@@ -255,14 +262,24 @@ parameters:
     description: 'Whether to use a proxy, might be required for Jenkins Plugin download.'
     value: 'true'
     required: true
+  - name: PROXY_HOST_BASE_64
+    displayName: 'Proxy Host'
+    description: 'The host for proxy authentication (Base64 single-encoded).'
+    value: ''
+    required: true
+  - name: PROXY_PORT_BASE_64
+    displayName: 'Proxy Port'
+    description: 'The port for proxy authentication (Base64 single-encoded).'
+    value: ''
+    required: true
   - name: PROXY_USER_BASE_64
     displayName: 'Proxy User'
-    description: 'The user for proxy authentication (Base64 double-encoded).'
+    description: 'The user for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
   - name: PROXY_PASS_BASE_64
     displayName: 'Proxy Password'
-    description: 'The password for proxy authentication (Base64 double-encoded).'
+    description: 'The password for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
   - name: NEXUS_NPM_REPO_TOKEN_BASE64
@@ -272,7 +289,7 @@ parameters:
     required: true
   - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
     displayName: 'Maven Deployment Token'
-    description: 'The Maven Deployment Token for Nexus auth (Base64 double-encoded).'
+    description: 'The Password of the Maven Deployment User for Nexus auth (Base64 single-encoded).'
     value: ''
     required: true
 labels:
