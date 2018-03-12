@@ -4,7 +4,7 @@ cloudbees-folder:6.0.4
 credentials:2.1.13
 display-url-api:2.0
 git-client:2.7.0
-git:3.3.0
+git:3.8.0
 git-server:1.7
 handlebars:1.1.1
 icon-shim:2.0.3
