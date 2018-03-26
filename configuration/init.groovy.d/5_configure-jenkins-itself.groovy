@@ -21,7 +21,7 @@ if (envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0) {
 } else {
     envVars = envVarsNodePropertyList.get(0).getEnvVars()
 }
-envVars.put("NO_PROXY", "nexus")
+envVars.put("NO_PROXY", "nexus,localhost,127.0.0.1")
 instance.save()
 
 
