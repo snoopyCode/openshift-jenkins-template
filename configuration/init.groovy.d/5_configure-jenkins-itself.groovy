@@ -28,3 +28,5 @@ instance.save()
 // Set "hudson.slaves.WorkspaceList" to "_" to avoid confusion in concurrent builds
 println("Setting \"hudson.slaves.WorkspaceList\" to \"_\"..")
 System.setProperty(WorkspaceList.class.getName(), "_")
+
+// TODO Configure Xray Plugin
