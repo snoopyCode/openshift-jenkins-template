@@ -80,3 +80,4 @@ lockable-resources:2.1
 envinject-api:1.5
 prometheus:1.0.6
 gatling:1.2.2
+cucumber-reports:3.15.0
