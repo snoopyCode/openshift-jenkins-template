@@ -30,4 +30,4 @@ println("Setting \"hudson.slaves.WorkspaceList\" to \"_\"..")
 System.setProperty(WorkspaceList.class.getName(), "_")
 
 // TODO Configure Xray Plugin
-println(">>> TODO: Configure XRay Plugin!")
+println("TODO: Configure XRay Plugin!")
