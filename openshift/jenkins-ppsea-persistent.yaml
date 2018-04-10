@@ -64,9 +64,8 @@ objects:
          type: Source
          sourceStrategy:
           from:
-            kind: ImageStreamTag
-            name: 'jenkins:latest'
-            namespace: openshift
+            kind: DockerImage
+            name: 'registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.6.173.0.96-11'
           env:
             - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
               value: 'true'
