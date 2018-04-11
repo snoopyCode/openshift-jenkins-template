@@ -141,6 +141,8 @@ objects:
                   value: 'true'
                 - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
                   value: 'true'
+                - name: JAVA_OPTS
+                  value: '${JAVA_OPTS}'
                 - name: JENKINS_SERVICE_NAME
                   value: '${JENKINS_SERVICE_NAME}'
                 - name: JNLP_SERVICE_NAME
@@ -282,6 +284,11 @@ parameters:
     displayName: 'Jenkins ImageStream Namespace'
     description: 'The OpenShift Namespace where the Jenkins ImageStream resides.'
     value: 'pps-ea'
+    required: true
+  - name: JAVA_OPTS
+    displayName: 'Java Options'
+    description: 'Set Options to the JVM'
+    value: '-XX:MaxMetaspaceSize=512m'
     required: true
   - name: USE_PROXY
     displayName: 'Use a proxy'
