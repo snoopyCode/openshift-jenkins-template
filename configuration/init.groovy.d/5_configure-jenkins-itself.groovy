@@ -54,5 +54,5 @@ println("Creating Job \"DependencyCheck_DataUpdate\"")
 try {
 	instance.createProjectFromXML("DependencyCheck_DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
 } catch(IllegalArgumentException e) {
-	println("Job \"DependencyCheck_DataUpdate\" already exists)
+	println("Job \"DependencyCheck_DataUpdate\" already exists")
 }
