@@ -51,4 +51,8 @@ println("TODO: Configure XRay Plugin!")
 
 // Create Jobs
 println("Creating Job \"DependencyCheck_DataUpdate\"")
-instance.createProjectFromXML("DependencyCheck_DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
+try {
+	instance.createProjectFromXML("DependencyCheck_DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
+} catch(IllegalArgumentException e) {
+	println("Job \"DependencyCheck_DataUpdate\" already exists)
+}
