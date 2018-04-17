@@ -50,5 +50,5 @@ if(instance.clouds != null) {
 println("TODO: Configure XRay Plugin!")
 
 // Create Jobs
-println("Creating Job \"DependencyCheck DataUpdate\"")
-instance.createProjectFromXML("DependencyCheck DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
+println("Creating Job \"DependencyCheck_DataUpdate\"")
+instance.createProjectFromXML("DependencyCheck_DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
