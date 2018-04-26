@@ -1,6 +1,7 @@
 import jenkins.model.Jenkins
 import hudson.slaves.EnvironmentVariablesNodeProperty
 import hudson.slaves.WorkspaceList
+import org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud
 
 instance = Jenkins.getInstance()
 
@@ -29,5 +30,29 @@ instance.save()
 println("Setting \"hudson.slaves.WorkspaceList\" to \"_\"..")
 System.setProperty(WorkspaceList.class.getName(), "_")
 
+
+// Set ContainerCap in Kubernetes Plugin
+println("Setting Kubernetes container cap..")
+if(instance.clouds != null) {
+	KubernetesCloud cloud = instance.clouds[0]
+	if(cloud != null) {
+		cloud.setContainerCapStr("") 
+		println("Kubernetes container cap set")
+	} else {
+		println("Kubernetes cloud not available!")
+	}
+} else {
+	println("Kubernetes clouds not available!")
+}
+
+
 // TODO Configure Xray Plugin
 println("TODO: Configure XRay Plugin!")
+
+// Create Jobs
+println("Creating Job \"DependencyCheck_DataUpdate\"")
+try {
+	instance.createProjectFromXML("DependencyCheck_DataUpdate", new FileInputStream(new File("/var/lib/jenkins/jobTemplates/dependency_check_data_update_config.xml")))
+} catch(IllegalArgumentException e) {
+	println("Job \"DependencyCheck_DataUpdate\" already exists")
+}

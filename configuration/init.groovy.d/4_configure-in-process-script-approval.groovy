@@ -28,3 +28,4 @@ scriptApproval.approveSignature("staticMethod org.codehaus.groovy.runtime.Encodi
 scriptApproval.approveSignature("method org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper getRawBuild")
 scriptApproval.approveSignature("new java.io.File java.lang.String")
 scriptApproval.approveSignature("staticMethod jenkins.model.Jenkins getInstance")
+scriptApproval.approveSignature("method jenkins.tasks.SimpleBuildStep perform hudson.model.Run hudson.FilePath hudson.Launcher hudson.model.TaskListener")
