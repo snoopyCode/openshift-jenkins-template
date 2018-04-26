@@ -18,7 +18,12 @@ objects:
     apiVersion: v1
     type: Opaque
     metadata:
-     name: '${JENKINS_SERVICE_NAME}-secret'
+      name: '${JENKINS_SERVICE_NAME}-secret'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
+      annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
     data:
      proxy-host: '${PROXY_HOST_BASE_64}'
      proxy-port: '${PROXY_PORT_BASE_64}'
@@ -30,7 +35,11 @@ objects:
     apiVersion: v1
     metadata:
       name: '${JENKINS_SERVICE_NAME}'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
       annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
         template.openshift.io/expose-uri: 'https://{.spec.host}{.spec.path}'
     spec:
       to:
@@ -42,7 +51,12 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-     name: '${JENKINS_SERVICE_NAME}-build'
+      name: '${JENKINS_SERVICE_NAME}-build'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
+      annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
     spec:
       source:
         type: Git
@@ -69,13 +83,22 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-     name: '${JENKINS_SERVICE_NAME}-image'
+      name: '${JENKINS_SERVICE_NAME}-image'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
+      annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
     spec: {}
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
       name: '${JENKINS_SERVICE_NAME}'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
       annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
         template.alpha.openshift.io/wait-for-ready: 'true'
     spec:
       strategy:
@@ -98,7 +121,10 @@ objects:
       template:
         metadata:
           labels:
-            name: '${JENKINS_SERVICE_NAME}'
+            app: ${JENKINS_SERVICE_NAME}
+            bmw-connectit-id: ${CONNECT_IT_ID}
+          annotations:
+            bmw-connectit-name: ${CONNECT_IT_NAME}
         spec:
           serviceAccountName: '${JENKINS_SERVICE_NAME}'
           containers:
@@ -180,13 +206,22 @@ objects:
     apiVersion: v1
     metadata:
       name: '${JENKINS_SERVICE_NAME}'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
       annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
         serviceaccounts.openshift.io/oauth-redirectreference.jenkins: >-
           {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${JENKINS_SERVICE_NAME}"}}
   - kind: RoleBinding
     apiVersion: v1
     metadata:
       name: '${JENKINS_SERVICE_NAME}_edit'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
+      annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
     groupNames: null
     subjects:
       - kind: ServiceAccount
@@ -197,6 +232,11 @@ objects:
     apiVersion: v1
     metadata:
       name: '${JNLP_SERVICE_NAME}'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
+      annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
     spec:
       ports:
         - name: agent
@@ -212,7 +252,11 @@ objects:
     apiVersion: v1
     metadata:
       name: '${JENKINS_SERVICE_NAME}'
+      labels:
+        app: ${JENKINS_SERVICE_NAME}
+        bmw-connectit-id: ${CONNECT_IT_ID}
       annotations:
+        bmw-connectit-name: ${CONNECT_IT_NAME}
         service.alpha.openshift.io/dependencies: '[{"name": "${JNLP_SERVICE_NAME}", "namespace": "", "kind": "Service"}]'
         service.openshift.io/infrastructure: 'true'
     spec:
@@ -232,76 +276,99 @@ parameters:
     description: 'The name of the OpenShift Service exposed for the Jenkins container.'
     value: 'jenkins-ppsea'
     required: true
+
+  - description: Project Connect IT ID
+    displayName: Connect IT ID
+    required: true
+    name: CONNECT_IT_ID
+    value: ''
+
+  - description: Project CONNECT IT Name
+    displayName: CONNECT IT Name
+    required: true
+    name: CONNECT_IT_NAME
+    value: ''
+    
   - name: JNLP_SERVICE_NAME
     displayName: 'Jenkins JNLP Service Name'
     description: 'The name of the service used for master/slave communication.'
     value: 'jenkins-ppsea-jnlp'
     required: true
+
   - name: GIT_URL
     displayName: 'Git URL'
     description: 'The Git URL to the Jenkins-Template Repo'
     value: 'ssh://git@git.bmwgroup.net:7999/ppsea/jenkins-template.git'
     required: true
+
   - name: GIT_SECRET
     displayName: 'Openshift SSH GIT Secret Name'
     description: 'The secret to clone the git repository'
     value: 'ppsea-ssh'
     required: true
+
   - name: HTTP_PROXY_URL_FOR_BUILDCONFIG
     displayName: 'Proxy URL for BuildConfig'
     description: 'The complete proxy URL for usage in the build config (relevant for plugin download).'
     value: 'http://USER:PASS@proxy.muc:8080'
     required: true
+
   - name: MEMORY_LIMIT
     displayName: 'Memory Limit'
     description: 'Maximum amount of memory the container can use.'
     value: '4Gi'
     required: true
+
   - name: NAMESPACE
     displayName: 'Jenkins ImageStream Namespace'
     description: 'The OpenShift Namespace where the Jenkins ImageStream resides.'
     value: 'pps-ea'
     required: true
+
   - name: JAVA_OPTS
     displayName: 'Java Options'
     description: 'Set Options to the JVM'
     value: '-XX:MaxMetaspaceSize=512m'
     required: true
+
   - name: USE_PROXY
     displayName: 'Use a proxy'
     description: 'Whether to use a proxy, might be required for Jenkins Plugin download.'
     value: 'true'
     required: true
+
   - name: PROXY_HOST_BASE_64
     displayName: 'Proxy Host'
     description: 'The host for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
+
   - name: PROXY_PORT_BASE_64
     displayName: 'Proxy Port'
     description: 'The port for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
+
   - name: PROXY_USER_BASE_64
     displayName: 'Proxy User'
     description: 'The user for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
+
   - name: PROXY_PASS_BASE_64
     displayName: 'Proxy Password'
     description: 'The password for proxy authentication (Base64 single-encoded).'
     value: ''
     required: true
+
   - name: NEXUS_NPM_REPO_TOKEN_BASE64
     displayName: Nexus NPM Token
     description: 'The NPM Token (user:pass) for Nexus Auth (Base64 double-encoded).'
     value: ''
     required: true
+
   - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
     displayName: 'Maven Deployment Token'
     description: 'The Password of the Maven Deployment User for Nexus auth (Base64 single-encoded).'
     value: ''
     required: true
-labels:
-  app: jenkins-ppsea-ephemeral
-  template: jenkins-ppsea-ephemeral-template
