@@ -21,9 +21,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}-secret'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
     data:
      proxy-host: '${PROXY_HOST_BASE_64}'
      proxy-port: '${PROXY_PORT_BASE_64}'
@@ -37,9 +37,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
         template.openshift.io/expose-uri: 'https://{.spec.host}{.spec.path}'
     spec:
       to:
@@ -54,9 +54,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}-build'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
     spec:
       source:
         type: Git
@@ -86,9 +86,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}-image'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
     spec: {}
   - kind: DeploymentConfig
     apiVersion: v1
@@ -96,9 +96,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
         template.alpha.openshift.io/wait-for-ready: 'true'
     spec:
       strategy:
@@ -122,9 +122,9 @@ objects:
         metadata:
           labels:
             app: ${JENKINS_SERVICE_NAME}
-            bmw-connectit-id: ${CONNECT_IT_ID}
+            bmw/connectit-id: ${CONNECT_IT_ID}
           annotations:
-            bmw-connectit-name: ${CONNECT_IT_NAME}
+            bmw/connectit-name: ${CONNECT_IT_NAME}
         spec:
           serviceAccountName: '${JENKINS_SERVICE_NAME}'
           containers:
@@ -208,9 +208,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
         serviceaccounts.openshift.io/oauth-redirectreference.jenkins: >-
           {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${JENKINS_SERVICE_NAME}"}}
   - kind: RoleBinding
@@ -219,9 +219,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}_edit'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
     groupNames: null
     subjects:
       - kind: ServiceAccount
@@ -234,9 +234,9 @@ objects:
       name: '${JNLP_SERVICE_NAME}'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
     spec:
       ports:
         - name: agent
@@ -254,9 +254,9 @@ objects:
       name: '${JENKINS_SERVICE_NAME}'
       labels:
         app: ${JENKINS_SERVICE_NAME}
-        bmw-connectit-id: ${CONNECT_IT_ID}
+        bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
-        bmw-connectit-name: ${CONNECT_IT_NAME}
+        bmw/connectit-name: ${CONNECT_IT_NAME}
         service.alpha.openshift.io/dependencies: '[{"name": "${JNLP_SERVICE_NAME}", "namespace": "", "kind": "Service"}]'
         service.openshift.io/infrastructure: 'true'
     spec:
