@@ -24,13 +24,9 @@ objects:
         bmw/connectit-id: ${CONNECT_IT_ID}
       annotations:
         bmw/connectit-name: ${CONNECT_IT_NAME}
-    data:
-     proxy-host: '${PROXY_HOST_BASE_64}'
-     proxy-port: '${PROXY_PORT_BASE_64}'
-     proxy-user: '${PROXY_USER_BASE_64}'
-     proxy-pass: '${PROXY_PASS_BASE_64}'
-     nexus-npm-repo-token: '${NEXUS_NPM_REPO_TOKEN_BASE64}'
-     maven-deployment-token: '${MAVEN_DEPLOYMENT_TOKEN_BASE64}'
+    stringData:
+     nexus-npm-repo-token: '${NEXUS_NPM_REPO_TOKEN}'
+     maven-deployment-token: '${MAVEN_DEPLOYMENT_TOKEN}'
   - kind: Route
     apiVersion: v1
     metadata:
@@ -67,19 +63,28 @@ objects:
       strategy:
          type: Source
          sourceStrategy:
+          from:
             kind: DockerImage
             name: 'registry.access.redhat.com/openshift3/jenkins-2-rhel7:v3.6.173.0.96-11'
           env:
             - name: OVERRIDE_PV_CONFIG_WITH_IMAGE_CONFIG
               value: 'true'
             - name: http_proxy
-              value: '${HTTP_PROXY_URL_FOR_BUILDCONFIG}'
+              valueFrom:
+                secretKeyRef:
+                  name: '${PROXY_SECRET_NAME}'
+                  key: fullHttpUrl
             - name: https_proxy
-              value: '${HTTP_PROXY_URL_FOR_BUILDCONFIG}'
+              valueFrom:
+                secretKeyRef:
+                  name: '${PROXY_SECRET_NAME}'
+                  key: fullHttpUrl
       output:
         to:
           kind: ImageStreamTag
           name: '${JENKINS_SERVICE_NAME}-image:latest'
+      triggers:
+        - type: ConfigChange
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -112,12 +117,11 @@ objects:
             from:
               kind: ImageStreamTag
               name: '${JENKINS_SERVICE_NAME}-image:latest'
-              namespace: '${NAMESPACE}'
             lastTriggeredImage: ''
         - type: ConfigChange
       replicas: 1
       selector:
-        name: '${JENKINS_SERVICE_NAME}'
+        app: '${JENKINS_SERVICE_NAME}'
       template:
         metadata:
           labels:
@@ -169,23 +173,23 @@ objects:
                 - name: PROXY_HOST_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: proxy-host
+                      name: '${PROXY_SECRET_NAME}'
+                      key: host
                 - name: PROXY_PORT_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: proxy-port
+                      name: '${PROXY_SECRET_NAME}'
+                      key: port
                 - name: PROXY_USER_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: proxy-user
+                      name: '${PROXY_SECRET_NAME}'
+                      key: user
                 - name: PROXY_PASS_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: '${JENKINS_SERVICE_NAME}-secret'
-                      key: proxy-pass
+                      name: '${PROXY_SECRET_NAME}'
+                      key: password
                 - name: MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET
                   valueFrom:
                     secretKeyRef:
@@ -245,7 +249,7 @@ objects:
           targetPort: 50000
           nodePort: 0
       selector:
-        name: '${JENKINS_SERVICE_NAME}'
+        app: '${JENKINS_SERVICE_NAME}'
       type: ClusterIP
       sessionAffinity: None
   - kind: Service
@@ -267,14 +271,20 @@ objects:
           targetPort: 8080
           nodePort: 0
       selector:
-        name: '${JENKINS_SERVICE_NAME}'
+        app: '${JENKINS_SERVICE_NAME}'
       type: ClusterIP
       sessionAffinity: None
 parameters:
   - name: JENKINS_SERVICE_NAME
     displayName: 'Jenkins Service Name'
     description: 'The name of the OpenShift Service exposed for the Jenkins container.'
-    value: 'jenkins-ppsea'
+    value: 'jenkins'
+    required: true
+
+  - name: JNLP_SERVICE_NAME
+    displayName: 'Jenkins JNLP Service Name'
+    description: 'The name of the service used for master/slave communication.'
+    value: 'jenkins-jnlp'
     required: true
 
   - description: Project Connect IT ID
@@ -288,12 +298,6 @@ parameters:
     required: true
     name: CONNECT_IT_NAME
     value: ''
-    
-  - name: JNLP_SERVICE_NAME
-    displayName: 'Jenkins JNLP Service Name'
-    description: 'The name of the service used for master/slave communication.'
-    value: 'jenkins-ppsea-jnlp'
-    required: true
 
   - name: GIT_URL
     displayName: 'Git URL'
@@ -304,31 +308,7 @@ parameters:
   - name: GIT_SECRET
     displayName: 'Openshift SSH GIT Secret Name'
     description: 'The secret to clone the git repository'
-    value: 'ppsea-ssh'
-    required: true
-
-  - name: HTTP_PROXY_URL_FOR_BUILDCONFIG
-    displayName: 'Proxy URL for BuildConfig'
-    description: 'The complete proxy URL for usage in the build config (relevant for plugin download).'
-    value: 'http://USER:PASS@proxy.muc:8080'
-    required: true
-
-  - name: MEMORY_LIMIT
-    displayName: 'Memory Limit'
-    description: 'Maximum amount of memory the container can use.'
-    value: '4Gi'
-    required: true
-
-  - name: NAMESPACE
-    displayName: 'Jenkins ImageStream Namespace'
-    description: 'The OpenShift Namespace where the Jenkins ImageStream resides.'
-    value: 'pps-ea'
-    required: true
-
-  - name: JAVA_OPTS
-    displayName: 'Java Options'
-    description: 'Set Options to the JVM'
-    value: '-XX:MaxMetaspaceSize=512m'
+    value: 'git-ssh'
     required: true
 
   - name: USE_PROXY
@@ -337,38 +317,38 @@ parameters:
     value: 'true'
     required: true
 
-  - name: PROXY_HOST_BASE_64
-    displayName: 'Proxy Host'
-    description: 'The host for proxy authentication (Base64 single-encoded).'
-    value: ''
+  - name: PROXY_SECRET_NAME
+    displayName: 'Proxy Secret Name'
+    description: 'The name of the OpenShift Secret containing the proxy configuration (host, port, user, password, fullHttpUrl).'
+    value: 'proxy'
     required: true
 
-  - name: PROXY_PORT_BASE_64
-    displayName: 'Proxy Port'
-    description: 'The port for proxy authentication (Base64 single-encoded).'
-    value: ''
+  - name: MEMORY_LIMIT
+    displayName: 'Memory Limit'
+    description: 'Maximum amount of memory the container can use.'
+    value: '4Gi'
     required: true
 
-  - name: PROXY_USER_BASE_64
-    displayName: 'Proxy User'
-    description: 'The user for proxy authentication (Base64 single-encoded).'
-    value: ''
+  - name: VOLUME_CAPACITY
+    displayName: 'Volume Capacity'
+    description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    value: '5Gi'
     required: true
 
-  - name: PROXY_PASS_BASE_64
-    displayName: 'Proxy Password'
-    description: 'The password for proxy authentication (Base64 single-encoded).'
-    value: ''
+  - name: JAVA_OPTS
+    displayName: 'Java Options'
+    description: 'Set Options to the JVM'
+    value: '-XX:MaxMetaspaceSize=512m'
     required: true
 
-  - name: NEXUS_NPM_REPO_TOKEN_BASE64
+  - name: NEXUS_NPM_REPO_TOKEN
     displayName: Nexus NPM Token
-    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 double-encoded).'
+    description: 'The NPM Token (user:pass) for Nexus Auth (Base64 encoded).'
     value: ''
     required: true
 
-  - name: MAVEN_DEPLOYMENT_TOKEN_BASE64
+  - name: MAVEN_DEPLOYMENT_TOKEN
     displayName: 'Maven Deployment Token'
-    description: 'The Password of the Maven Deployment User for Nexus auth (Base64 single-encoded).'
+    description: 'The Password of the Maven Deployment User for Nexus auth.'
     value: ''
     required: true
