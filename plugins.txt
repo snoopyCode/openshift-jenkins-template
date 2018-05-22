@@ -60,7 +60,7 @@ jackson2-api:2.7.3
 docker-plugin:1.0.4
 variant:1.1
 durable-task:1.17
-kubernetes:1.5.1
+kubernetes:1.6.0
 openshift-client:1.0.2
 workflow-api:2.24
 openshift-pipeline:1.0.52
