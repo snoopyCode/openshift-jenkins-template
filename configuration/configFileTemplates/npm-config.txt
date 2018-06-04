@@ -1,3 +1,2 @@
 email=npm@deployment.com
 registry=http://nexus:8081/repository/npm-group/
-_auth=${NEXUS_NPM_REPO_TOKEN}
