@@ -52,3 +52,22 @@ store.addCredentials(domain, new StringCredentialsImpl(
         "maven-deployment-token",
         Secret.fromString(mavenDeploymentToken))
 )
+
+// Credentials for stashNotifier plugin
+// Used in 5_configure-jenkins-itself.groovy
+println("Creating Bitbucket credentials...")
+
+def bitbucketApiUserName = env["BITBUCKET_API_USER_NAME"]?.trim()
+def bitbucketApiUserPassword = env["BITBUCKET_API_USER_PASSWORD"]?.trim()
+
+if (!bitbucketApiUserName || !bitbucketApiUserPassword) {
+    println("Missing Bitbucket credentials. Skipping...")
+} else {
+    store.addCredentials(domain, new UsernamePasswordCredentialsImpl(
+            CredentialsScope.GLOBAL,
+            "bitbucket-api",
+            "User that is allowed to interact with the Build REST API of the Bitbucket Server Repositories",
+            bitbucketApiUserName,
+            bitbucketApiUserPassword
+    ))
+}
