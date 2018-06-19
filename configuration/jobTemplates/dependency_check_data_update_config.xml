@@ -25,7 +25,7 @@
       <buildStep class="org.jenkinsci.plugins.DependencyCheck.DependencyCheckUpdateOnlyBuilder" plugin="dependency-check-jenkins-plugin@3.1.2">
         <skipOnScmChange>false</skipOnScmChange>
         <skipOnUpstreamChange>false</skipOnUpstreamChange>
-        <datadir>/var/lib/jenkins/caches/dependency-check-data</datadir>
+        <datadir>/dependency-check-data</datadir>
       </buildStep>
       <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@0.10"/>
     </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
