@@ -27,7 +27,7 @@ plain-credentials:1.4
 script-security:1.40
 ssh-credentials:1.13
 subversion:2.7.2
-workflow-aggregator:2.1
+workflow-aggregator:2.5
 workflow-basic-steps:2.4
 workflow-cps-global-lib:2.8
 workflow-durable-task-step:2.11
@@ -60,7 +60,7 @@ jackson2-api:2.7.3
 docker-plugin:1.0.4
 variant:1.1
 durable-task:1.17
-kubernetes:1.6.0
+kubernetes:1.8.1
 openshift-client:1.0.2
 workflow-api:2.24
 openshift-pipeline:1.0.52
