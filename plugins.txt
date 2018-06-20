@@ -83,3 +83,4 @@ gatling:1.2.2
 cucumber-reports:3.15.0
 dependency-check-jenkins-plugin:3.1.2
 stashNotifier:1.13
+jira-steps:1.4.1
