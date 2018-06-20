@@ -83,7 +83,7 @@ if (!bitbucketServerRootUrl) {
     formData.put("ignoreUnverifiedSsl", false)
     formData.put("includeBuildNumberInKey", true)
     // Configured in 1_configure-global-credentials.groovy
-    formData.put("credentialsId", "bitbucket-api")
+    formData.put("credentialsId", "qq-user")
     formData.put("prependParentProjectKey", false)
     formData.put("disableInprogressNotification", false)
     formData.put("considerUnstableAsSuccess", false)

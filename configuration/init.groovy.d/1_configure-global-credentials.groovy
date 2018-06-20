@@ -17,6 +17,10 @@ store = Jenkins.instance.getExtensionList('com.cloudbees.plugins.credentials.Sys
 
 // Get credentials from environment
 def env = System.getenv()
+
+def qqUserName = env["QQ_USER_NAME"]?.trim()
+def qqUserPassword = env["QQ_USER_PASSWORD"]?.trim()
+
 String mavenDeploymentToken = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
 
 // Set proxy
@@ -53,21 +57,17 @@ store.addCredentials(domain, new StringCredentialsImpl(
         Secret.fromString(mavenDeploymentToken))
 )
 
-// Credentials for stashNotifier plugin
 // Used in 5_configure-jenkins-itself.groovy
-println("Creating Bitbucket credentials...")
+println("Creating QQ User credentials...")
 
-def bitbucketApiUserName = env["BITBUCKET_API_USER_NAME"]?.trim()
-def bitbucketApiUserPassword = env["BITBUCKET_API_USER_PASSWORD"]?.trim()
-
-if (!bitbucketApiUserName || !bitbucketApiUserPassword) {
-    println("Missing Bitbucket credentials. Skipping...")
+if (!qqUserName || !qqUserPassword) {
+    println("Missing QQ User credentials. Skipping...")
 } else {
     store.addCredentials(domain, new UsernamePasswordCredentialsImpl(
             CredentialsScope.GLOBAL,
-            "bitbucket-api",
-            "User that is allowed to interact with the Build REST API of the Bitbucket Server Repositories",
-            bitbucketApiUserName,
-            bitbucketApiUserPassword
+            "qq-user",
+            "User that is allowed to interact with the Build REST API of the Bitbucket Server Repositories and the JIRA REST API",
+            qqUserName,
+            qqUserPassword
     ))
 }
