@@ -4,6 +4,8 @@ import jenkins.model.Jenkins
 import net.sf.json.JSONArray
 import net.sf.json.JSONObject
 import org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud
+import org.thoughtslive.jenkins.plugins.jira.Config
+import org.thoughtslive.jenkins.plugins.jira.Site
 
 instance = Jenkins.getInstance()
 
