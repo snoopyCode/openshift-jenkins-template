@@ -1,10 +1,16 @@
-import jenkins.model.Jenkins
 import hudson.slaves.EnvironmentVariablesNodeProperty
 import hudson.slaves.WorkspaceList
-import org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud
+import jenkins.model.Jenkins
+import net.sf.json.JSONArray
 import net.sf.json.JSONObject
+import org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud
 
 instance = Jenkins.getInstance()
+
+def env = System.getenv()
+
+def qqUserName = env["QQ_USER_NAME"]?.trim()
+def qqUserPassword = env["QQ_USER_PASSWORD"]?.trim()
 
 // Set quiet period to 270 sec
 println("Setting quiet period..")
@@ -61,7 +67,6 @@ try {
 // Configure Stash (Bitbucket Server) Notifier
 println("Configuring stashNotifier (Bitbucket Server)...")
 
-def env = System.getenv()
 def bitbucketServerRootUrl = env["BITBUCKET_ROOT_URL"]?.trim()
 
 if (!bitbucketServerRootUrl) {
@@ -78,11 +83,63 @@ if (!bitbucketServerRootUrl) {
     formData.put("ignoreUnverifiedSsl", false)
     formData.put("includeBuildNumberInKey", true)
     // Configured in 1_configure-global-credentials.groovy
-    formData.put("credentialsId", "bitbucket-api")
+    formData.put("credentialsId", "qq-user")
     formData.put("prependParentProjectKey", false)
     formData.put("disableInprogressNotification", false)
     formData.put("considerUnstableAsSuccess", false)
 
     stashNotifier.configure(null, formData)
     stashNotifier.save()
+}
+
+// Configure JIRA steps
+
+println("Configuring jira-steps...")
+
+if (!qqUserName || !qqUserPassword) {
+    println("Missing QQ user. Skipping...")
+} else {
+    // https://jenkinsci.github.io/jira-steps-plugin/getting-started/config/script/
+
+    JSONArray sites = [
+            [
+                    name       : 'ATC JIRA',
+                    url        : 'https://atc.bmwgroup.net/jira/',
+                    timeout    : 10000,
+                    readTimeout: 10000,
+                    loginType  : 'BASIC',
+                    userName   : qqUserName,
+                    password   : qqUserPassword
+            ]
+    ] as JSONArray
+
+    //get global Jenkins configuration
+    Config.ConfigDescriptorImpl config = Jenkins.instance.getExtensionList(Config.ConfigDescriptorImpl.class)[0]
+
+    //delete all existing sites
+    config.@sites.clear()
+
+    //configure new sites from the above JSONArray
+    sites.each { s ->
+        String loginType = s.optString('loginType', '').toUpperCase()
+        if (loginType in ['BASIC', 'OAUTH']) {
+            Site site = new Site(s.optString('name', ''), new URL(s.optString('url', '')), s.optString('loginType', ''), s.optInt('timeout', 10000))
+            if (loginType == 'BASIC') {
+                site.setUserName(s.optString('userName', ''))
+                site.setPassword(s.optString('password', ''))
+                site.setReadTimeout(s.optInt('readTimeout', 10000))
+            } else { //loginType is OAUTH
+                site.setConsumerKey(s.optString('consumerKey', ''))
+                site.setPrivateKey(s.optString('privateKey', ''))
+                site.setSecret(s.optString('secret', ''))
+                site.setToken(s.optString('token', ''))
+                site.setReadTimeout(s.optInt('readTimeout', 10000))
+            }
+            //setSites does not make sense as a name because you can only set one site instead of a list :-/
+            config.setSites(site)
+        }
+    }
+
+    //persist configuration to disk as XML
+    config.save()
 }
