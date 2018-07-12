@@ -31,7 +31,7 @@ if (envVarsNodePropertyList == null || envVarsNodePropertyList.size() == 0) {
 } else {
     envVars = envVarsNodePropertyList.get(0).getEnvVars()
 }
-envVars.put("NO_PROXY", "nexus,localhost,127.0.0.1")
+envVars.put("NO_PROXY", "*.bmwgroup.net,bmwgroup.net,localhost,127.0.0.1")
 instance.save()
 
 
@@ -45,7 +45,7 @@ println("Setting Kubernetes container cap..")
 if(instance.clouds != null) {
 	KubernetesCloud cloud = instance.clouds[0]
 	if(cloud != null) {
-		cloud.setContainerCapStr("") 
+		cloud.setContainerCapStr("")
 		println("Kubernetes container cap set")
 	} else {
 		println("Kubernetes cloud not available!")

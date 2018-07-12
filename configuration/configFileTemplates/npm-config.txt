@@ -1,2 +1,2 @@
 email=npm@deployment.com
-registry=http://nexus:8081/repository/npm-group/
+registry=https://nexus-sprint-cicd.mp-dev-cnap.bmwgroup.net/repository/npm-group/

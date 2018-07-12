@@ -24,7 +24,7 @@
       <mirror>
          <id>nexus</id>
          <name>OpenShift Nexus</name>
-         <url>http://nexus:8081/repository/public/</url>
+         <url>https://nexus-sprint-cicd.mp-dev-cnap.bmwgroup.net/repository/public/</url>
          <mirrorOf>*</mirrorOf>
       </mirror>
   </mirrors>
@@ -39,14 +39,14 @@
         <repository>
             <id>central</id>
             <name>Nexus</name>
-            <url>http://nexus:8081/repository/public/</url>
+            <url>https://nexus-sprint-cicd.mp-dev-cnap.bmwgroup.net/repository/public/</url>
         </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
             <id>central</id>
             <name>Nexus</name>
-            <url>http://nexus:8081/repository/public/</url>
+            <url>https://nexus-sprint-cicd.mp-dev-cnap.bmwgroup.net/repository/public/</url>
         </pluginRepository>
       </pluginRepositories>
     </profile>
