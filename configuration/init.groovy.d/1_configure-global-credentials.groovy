@@ -21,8 +21,6 @@ def env = System.getenv()
 def qqUserName = env["QQ_USER_NAME"]?.trim()
 def qqUserPassword = env["QQ_USER_PASSWORD"]?.trim()
 
-String mavenDeploymentToken = env["MAVEN_DEPLOYMENT_TOKEN_FROM_SECRET"]
-
 // Set proxy
 if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
     String proxyHost = env["PROXY_HOST_FROM_SECRET"]
@@ -47,15 +45,6 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
             Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@"+ proxyHost + ":" + proxyPort))
     )
 }
-
-// "maven-deployment-token" for Maven builds
-println("Creating \"maven-deployment-token\" secret text..")
-store.addCredentials(domain, new StringCredentialsImpl(
-        CredentialsScope.GLOBAL,
-        "maven-deployment-token",
-        "maven-deployment-token",
-        Secret.fromString(mavenDeploymentToken))
-)
 
 // Used in 5_configure-jenkins-itself.groovy
 println("Creating QQ User credentials...")
