@@ -33,7 +33,7 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
             CredentialsScope.GLOBAL,
             "http-proxy",
             "http-proxy",
-            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@"+ proxyHost + ":" + proxyPort))
+            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@" + proxyHost + ":" + proxyPort))
     )
 
     // "https-proxy" for npm builds
@@ -42,21 +42,25 @@ if (env["USE_PROXY"] != null && env["USE_PROXY"] == "true") {
             CredentialsScope.GLOBAL,
             "https-proxy",
             "https-proxy",
-            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@"+ proxyHost + ":" + proxyPort))
+            Secret.fromString("http://" + proxyUser + ":" + proxyPass + "@" + proxyHost + ":" + proxyPort))
     )
 }
 
+if (env["TARGET_ENVIRONMENT"] == "TEST") {
 // Used in 5_configure-jenkins-itself.groovy
-println("Creating QQ User credentials...")
+    println("Creating QQ User credentials...")
 
-if (!qqUserName || !qqUserPassword) {
-    println("Missing QQ User credentials. Skipping...")
+    if (!qqUserName || !qqUserPassword) {
+        println("Missing QQ User credentials. Skipping...")
+    } else {
+        store.addCredentials(domain, new UsernamePasswordCredentialsImpl(
+                CredentialsScope.GLOBAL,
+                "qq-user",
+                "User that is allowed to interact with the Build REST API of the Bitbucket Server Repositories and the JIRA REST API",
+                qqUserName,
+                qqUserPassword
+        ))
+    }
 } else {
-    store.addCredentials(domain, new UsernamePasswordCredentialsImpl(
-            CredentialsScope.GLOBAL,
-            "qq-user",
-            "User that is allowed to interact with the Build REST API of the Bitbucket Server Repositories and the JIRA REST API",
-            qqUserName,
-            qqUserPassword
-    ))
+    println("Skipping creation of QQ User credentials: Not in target environment.")
 }
