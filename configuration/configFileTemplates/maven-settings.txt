@@ -5,18 +5,18 @@
   <servers>
     <server>
       <id>nexus</id>
-      <username>deployment</username>
-      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
+      <username>${env.NEXUS_USERNAME}</username>
+      <password>${env.NEXUS_PASSWORD}</password>
     </server>
     <server>
       <id>nexus-snapshots</id>
-      <username>deployment</username>
-      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
+      <username>${env.NEXUS_USERNAME}</username>
+      <password>${env.NEXUS_PASSWORD}</password>
     </server>
     <server>
       <id>nexus-releases</id>
-      <username>deployment</username>
-      <password>${env.MAVEN_DEPLOYMENT_TOKEN}</password>
+      <username>${env.NEXUS_USERNAME}</username>
+      <password>${env.NEXUS_PASSWORD}</password>
     </server>
   </servers>
 
