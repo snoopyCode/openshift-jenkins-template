@@ -29,3 +29,4 @@ scriptApproval.approveSignature("method org.jenkinsci.plugins.workflow.support.s
 scriptApproval.approveSignature("new java.io.File java.lang.String")
 scriptApproval.approveSignature("staticMethod jenkins.model.Jenkins getInstance")
 scriptApproval.approveSignature("method jenkins.tasks.SimpleBuildStep perform hudson.model.Run hudson.FilePath hudson.Launcher hudson.model.TaskListener")
+scriptApproval.approveSignature("method hudson.plugins.git.GitSCM getUserRemoteConfigs")
