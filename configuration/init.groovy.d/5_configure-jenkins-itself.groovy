@@ -90,7 +90,7 @@ if (env["TARGET_ENVIRONMENT"] == "TEST") {
 
         formData.put("stashRootUrl", bitbucketServerRootUrl)
         formData.put("ignoreUnverifiedSsl", false)
-        formData.put("includeBuildNumberInKey", true)
+        formData.put("includeBuildNumberInKey", false)
         // Configured in 1_configure-global-credentials.groovy
         formData.put("credentialsId", "qq-user")
         formData.put("prependParentProjectKey", false)
